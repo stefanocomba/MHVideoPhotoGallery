@@ -48,6 +48,19 @@
     self.attributedString = nil;
     return self;
 }
+
+- (instancetype) initWithPhotoAsset:(PHAsset*) asset{
+    self = [super init];
+    if (!self)
+        return nil;
+    self.URLString = nil;
+    self.thumbnailURL = nil;
+    self.descriptionString = nil;
+    self.galleryType = MHGalleryTypeImage;
+    self.attributedString = nil;
+    self.asset = asset;
+    return self;
+}
 +(instancetype)itemWithURL:(NSString *)URLString
               thumbnailURL:(NSString*)thumbnailURL{
     

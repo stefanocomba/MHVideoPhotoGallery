@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MHGallery.h"
-
+@import Photos;
 typedef NS_ENUM(NSUInteger, MHGalleryType) {
     MHGalleryTypeImage,
     MHGalleryTypeVideo
@@ -25,6 +25,7 @@ typedef NS_ENUM(NSUInteger, MHGalleryType) {
 @property (nonatomic,strong) NSString           *descriptionString;
 @property (nonatomic,strong) NSAttributedString *attributedString;
 @property (nonatomic,assign) MHGalleryType       galleryType;
+@property (nonatomic,strong) PHAsset* asset;
 /**
  *  MHGalleryItem initWithURL:galleryType
  *
@@ -44,7 +45,7 @@ typedef NS_ENUM(NSUInteger, MHGalleryType) {
 
 + (instancetype)itemWithURL:(NSString*)URLString
                 galleryType:(MHGalleryType)galleryType;
-
+- (instancetype) initWithPhotoAsset:(PHAsset*) asset;
 /**
  *  MHGalleryItem itemWithYoutubeVideoID:
  *

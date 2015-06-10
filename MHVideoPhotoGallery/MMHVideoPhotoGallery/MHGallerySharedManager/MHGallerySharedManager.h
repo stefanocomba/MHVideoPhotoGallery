@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MHGallery.h"
-
+@import Photos;
 
 typedef NS_ENUM(NSUInteger, MHAssetImageType) {
     MHAssetImageTypeFull,
@@ -57,6 +57,8 @@ typedef NS_ENUM(NSUInteger, MHYoutubeThumbQuality) {
  *  default is MHYoutubeThumbQualityHQ
  */
 @property (nonatomic,assign) MHYoutubeThumbQuality youtubeThumbQuality;
+
+@property (nonatomic,strong) PHImageManager* imageManager;
 /**
  *  Default is MHVimeoThumbQualityLarge
  */
@@ -88,7 +90,9 @@ typedef NS_ENUM(NSUInteger, MHYoutubeThumbQuality) {
  */
 -(void)startDownloadingThumbImage:(NSString*)urlString
                      successBlock:(void (^)(UIImage *image,NSUInteger videoDuration,NSError *error))succeedBlock;
-
+- (void)getImageFromPhotoLibrary:(PHAsset*)asset
+                       assetType:(MHAssetImageType)type
+                    successBlock:(void (^)(UIImage *image,NSError *error))succeedBlock;
 
 -(BOOL)isUIViewControllerBasedStatusBarAppearance;
 

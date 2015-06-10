@@ -19,7 +19,12 @@
     });
     return sharedManagerInstance;
 }
-
+- (PHImageManager *)imageManager{
+    if (!_imageManager){
+        _imageManager = [PHImageManager new];
+    }
+    return _imageManager;
+}
 -(void)getImageFromAssetLibrary:(NSString*)urlString
                       assetType:(MHAssetImageType)type
                    successBlock:(void (^)(UIImage *image,NSError *error))succeedBlock{
@@ -52,7 +57,23 @@
                       }];
     });
 }
-
+- (void)getImageFromPhotoLibrary:(PHAsset*)asset
+                        assetType:(MHAssetImageType)type
+                     successBlock:(void (^)(UIImage *image,NSError *error))succeedBlock{
+    
+    CGSize size = (type == MHAssetImageTypeFull)?CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX):CGSizeMake(300, 300);
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+    PHImageRequestID requestID = [self.imageManager requestImageForAsset:asset  targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+        if ([info[PHImageResultIsDegradedKey] boolValue] == NO){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                succeedBlock(result,nil);
+            });
+            
+        };
+    }
+        ];
+    });
+}
 -(BOOL)isUIViewControllerBasedStatusBarAppearance{
     NSNumber *isUIVCBasedStatusBarAppearance = [NSBundle.mainBundle objectForInfoDictionaryKey:@"UIViewControllerBasedStatusBarAppearance"];
     if (isUIVCBasedStatusBarAppearance) {

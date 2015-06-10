@@ -39,7 +39,20 @@
 {
     [super viewDidLoad];
     self.allData = [NSMutableArray new];
-    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+    PHFetchOptions* fetchOptions = [[PHFetchOptions alloc] init];
+    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    fetchOptions.predicate = [NSPredicate predicateWithFormat:@"creationDate <=%@",[NSDate date]];
+    PHFetchResult* fetchResult = [PHAsset fetchAssetsWithOptions:fetchOptions];
+    NSMutableArray *items = [NSMutableArray new];
+    
+    [fetchResult enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        MHGalleryItem *item = [[MHGalleryItem alloc]initWithPhotoAsset:obj];
+        [items addObject:item];
+    }];
+    [self.allData addObject:[[MHGallerySectionItem alloc] initWithSectionName:@"prova" items:items]];
+    
+    [self.tableView reloadData];
+    /*ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
     
     [library enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
         [group setAssetsFilter:[ALAssetsFilter allAssets]];
@@ -63,7 +76,7 @@
     } failureBlock: ^(NSError *error) {
         
     }];
-
+*/
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

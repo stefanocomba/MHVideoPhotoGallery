@@ -10,7 +10,7 @@
 #import "MHGallery.h"
 #import "SDImageCache.h"
 #import "UIImageView+WebCache.h"
-
+@import Photos;
 @implementation UIImageView (MHGallery)
 
 -(void)setThumbWithURL:(NSString*)URL
@@ -40,7 +40,17 @@
     
     __weak typeof(self) weakSelf = self;
     
-    if ([item.URLString rangeOfString:MHAssetLibrary].location != NSNotFound && item.URLString) {
+    if (item.asset) {
+        MHAssetImageType assetType = MHAssetImageTypeThumb;
+        if (imageType == MHImageTypeFull) {
+            assetType = MHAssetImageTypeFull;
+        }
+        [MHGallerySharedManager.sharedManager getImageFromPhotoLibrary:item.asset assetType:assetType successBlock:^(UIImage *image, NSError *error) {
+            [weakSelf setImageForImageView:image successBlock:succeedBlock];
+        }];
+    }
+    
+    else if ([item.URLString rangeOfString:MHAssetLibrary].location != NSNotFound && item.URLString) {
         
         MHAssetImageType assetType = MHAssetImageTypeThumb;
         if (imageType == MHImageTypeFull) {
