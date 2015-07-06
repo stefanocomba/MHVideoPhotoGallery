@@ -63,7 +63,9 @@
     
     CGSize size = (type == MHAssetImageTypeFull)?CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX):CGSizeMake(300, 300);
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-    PHImageRequestID requestID = [self.imageManager requestImageForAsset:asset  targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+        PHImageRequestOptions *options = [PHImageRequestOptions new];
+        options.networkAccessAllowed = YES;
+    PHImageRequestID requestID = [self.imageManager requestImageForAsset:asset  targetSize:size contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *result, NSDictionary *info) {
         if ([info[PHImageResultIsDegradedKey] boolValue] == NO){
             dispatch_async(dispatch_get_main_queue(), ^{
                 succeedBlock(result,nil);
