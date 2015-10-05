@@ -19,10 +19,12 @@
 @end
 
 
-@interface MHGalleryImageViewerViewController : UIViewController<UIPageViewControllerDelegate,UIPageViewControllerDataSource,UINavigationControllerDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UINavigationBarDelegate>
+@interface MHGalleryImageViewerViewController : UIViewController<UIPageViewControllerDelegate,UIPageViewControllerDataSource,UINavigationControllerDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UINavigationBarDelegate, UITextViewDelegate>
 
 @property (nonatomic, strong)          NSArray *galleryItems;
 @property (nonatomic, strong)          UIToolbar *toolbar;
+@property (nonatomic, strong)          UITextView *titleView;
+@property (nonatomic, strong)          UIToolbar *titleViewBackground;
 @property (nonatomic, strong)          UITextView *descriptionView;
 @property (nonatomic, strong)          UIToolbar *descriptionViewBackground;
 @property (nonatomic)                  NSInteger pageIndex;
