@@ -80,6 +80,9 @@ typedef NS_ENUM(NSUInteger, MHYoutubeThumbQuality) {
  */
 @property (nonatomic,assign) MHYoutubeVideoQuality youtubeVideoQuality;
 
+@property (nonatomic,assign) CGSize photoAssetThumbnailTargetSize;
+@property (nonatomic,assign) CGSize photoAssetFullScreenTargetSize;
+
 + (MHGallerySharedManager *)sharedManager;
 /**
  *  You can create a Thumbnail from a Video, you can create it from Videos from a Webserver, Youtube and Vimeo

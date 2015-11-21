@@ -60,18 +60,18 @@
 - (void)getImageFromPhotoLibrary:(PHAsset*)asset
                         assetType:(MHAssetImageType)type
                      successBlock:(void (^)(UIImage *image,NSError *error))succeedBlock{
-    
-    CGSize size = (type == MHAssetImageTypeFull)?CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX):CGSizeMake(300, 300);
+    MHGallerySharedManager* __weak weakSelf = self;
+    CGSize size = (type == MHAssetImageTypeFull)?self.photoAssetFullScreenTargetSize:self.photoAssetThumbnailTargetSize;
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         PHImageRequestOptions *options = [PHImageRequestOptions new];
         options.networkAccessAllowed = YES;
-    PHImageRequestID requestID = [self.imageManager requestImageForAsset:asset  targetSize:size contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *result, NSDictionary *info) {
-        if ([info[PHImageResultIsDegradedKey] boolValue] == NO){
+    PHImageRequestID requestID = [weakSelf.imageManager requestImageForAsset:asset  targetSize:size contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *result, NSDictionary *info) {
+        //if ([info[PHImageResultIsDegradedKey] boolValue] == NO){
             dispatch_async(dispatch_get_main_queue(), ^{
                 succeedBlock(result,nil);
             });
             
-        };
+        //};
     }
         ];
     });
@@ -492,5 +492,16 @@
     }
     return string;
 }
-
+- (CGSize)photoAssetThumbnailTargetSize {
+    if (CGSizeEqualToSize(_photoAssetThumbnailTargetSize,CGSizeZero)) {
+        _photoAssetThumbnailTargetSize = CGSizeMake(300, 300);
+    }
+    return _photoAssetThumbnailTargetSize;
+}
+- (CGSize)photoAssetFullScreenTargetSize {
+    if (CGSizeEqualToSize(_photoAssetFullScreenTargetSize,CGSizeZero)) {
+        _photoAssetFullScreenTargetSize = CGSizeMake(2048, 2048);
+    }
+    return _photoAssetFullScreenTargetSize;
+}
 @end
